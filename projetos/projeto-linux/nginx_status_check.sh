@@ -4,8 +4,8 @@
 SYS_LOG_DIR="/var/log/nginx"
 
 # Localização dos nossos arquivos de log online e offline
-NGINX_LOG_ONLINE="$SYS_LOG_DIR/log_online.log"
-NGINX_LOG_OFFLINE="$SYS_LOG_DIR/log_offline.log"
+NGINX_LOG_ONLINE="$SYS_LOG_DIR/status_online.log"
+NGINX_LOG_OFFLINE="$SYS_LOG_DIR/status_offline.log"
 
 # Data atual
 DATE=$(date '+%Y-%m-%d %H:%M:%S')

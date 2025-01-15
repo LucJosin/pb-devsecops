@@ -144,8 +144,8 @@ SYS_LOG_DIR="/var/log/nginx"
 Define duas variáveis com as localizações dos arquivos onde serão salvos os logs (ONLINE E OFFLINE):
 
 ```bash
-NGINX_LOG_ONLINE="$SYS_LOG_DIR/log_online.log"
-NGINX_LOG_OFFLINE="$SYS_LOG_DIR/log_offline.log"
+NGINX_status_online="$SYS_LOG_DIR/status_online.log"
+NGINX_status_offline="$SYS_LOG_DIR/status_offline.log"
 ```
 
 4. Parte 4
@@ -158,17 +158,21 @@ DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
 5. Parte 5
 
-Verifica o status atual e escreve nos arquivos **NGINX_LOG_ONLINE** ou **NGINX_LOG_OFFLINE**
+Verifica o status atual e escreve nos arquivos **NGINX_status_online** ou **NGINX_status_offline**
 
 ```bash
 if systemctl is-active --quiet nginx; then
-        echo "$DATE NGINX: O serviço NGINX está ONLINE" >> "$NGINX_LOG_ONLINE"
+        echo "$DATE NGINX: O serviço NGINX está ONLINE" >> "$NGINX_status_online"
 else
-        echo "$DATE NGINX: O serviço NGINX está OFFLINE" >> "$NGINX_LOG_OFFLINE"
+        echo "$DATE NGINX: O serviço NGINX está OFFLINE" >> "$NGINX_status_offline"
 fi
 ```
 
-Arquivo completo:
+#### Escrendo no arquivo
+
+Para escrever o script no arquivo vamos usar o editor chamado **nano**.
+
+1. Copie o arquivo completo:
 
 ```bash
 #!/usr/bin/env bash
@@ -177,19 +181,34 @@ Arquivo completo:
 SYS_LOG_DIR="/var/log/nginx"
 
 # Localização dos nossos arquivos de log online e offline
-NGINX_LOG_ONLINE="$SYS_LOG_DIR/log_online.log"
-NGINX_LOG_OFFLINE="$SYS_LOG_DIR/log_offline.log"
+NGINX_status_online="$SYS_LOG_DIR/status_online.log"
+NGINX_status_offline="$SYS_LOG_DIR/status_offline.log"
 
 # Data atual
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
-# Verifica o status atual e escreve nos arquivos 'NGINX_LOG_ONLINE' ou 'NGINX_LOG_OFFLINE'
+# Verifica o status atual e escreve nos arquivos 'NGINX_status_online' ou 'NGINX_status_offline'
 if systemctl is-active --quiet nginx; then
-        echo "$DATE status: O serviço NGINX está ONLINE" >> "$NGINX_LOG_ONLINE"
+        echo "$DATE status: O serviço NGINX está ONLINE" >> "$NGINX_status_online"
 else
-        echo "$DATE status: O serviço NGINX está OFFLINE" >> "$NGINX_LOG_OFFLINE"
+        echo "$DATE status: O serviço NGINX está OFFLINE" >> "$NGINX_status_offline"
 fi
 ```
+
+2. Cole no arquivo usando o nano:
+
+```
+sudo nano /usr/bin/nginx_status_check.sh
+```
+
+> [!NOTE]
+> Use as teclhas <kbd>Ctrl</kbd> + <kbd>C</kbd> para copiar e <kbd>Ctrl</kbd> + <kbd>V</kbd> para colar.
+
+3. Salvando e saindo do nano:
+
+- <kbd>Ctrl</kbd> + <kbd>O</kbd> para escrever o arquivo;
+- <kbd>Enter</kbd> para confirmar;
+- <kbd>Ctrl</kbd> + <kbd>X</kbd> para sair do nano;
 
 ### Atualização das permissões
 
@@ -211,11 +230,11 @@ chmod +x /usr/bin/nginx_status_check.sh
 Precisamos criar e atualizar as permissões dos arquivos de log, necessário por conta da localização **(/var/log/)**.
 
 ```
-touch /var/log/nginx/log_online.log /var/log/nginx/log_offline.log && chmod 644 /var/log/nginx/log_online.log /var/log/nginx/log_offline.log
+sudo touch /var/log/nginx/status_online.log /var/log/nginx/status_offline.log && sudo chmod 644 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
 ```
 
 > [!NOTE]
-> Esse comando irá criar os arquivos 'log_online.log' e 'log_offline.log' e definir a permissão de **leitura** e **escrita** para o usuário.
+> Esse comando irá criar os arquivos 'status_online.log' e 'status_offline.log' e definir a permissão de **leitura** e **escrita** para o usuário.
 
 ### Aplicação do CronJob
 
@@ -251,10 +270,10 @@ Abra o terminal e escreva/cole o seguinte comando:
 
 Vamos precisar esperar alguns minutos para que o CronJob faça nosso script funcionar.
 
-No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'nginx_online.txt':
+No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'status_online.log':
 
 ```
-tail -f /var/log/nginx/nginx_online.txt
+tail -f /var/log/nginx/status_online.log
 ```
 
 > [!NOTE]
@@ -280,10 +299,10 @@ Para testar o estado **Offline** do **NGINX** iremos parar por um momento utiliz
 sudo systemctl stop nginx
 ```
 
-No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'nginx_offlien.txt':
+No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'status_offline.log':
 
 ```
-tail -f /var/log/nginx/nginx_offline.txt
+tail -f /var/log/nginx/status_offline.log
 ```
 
 <details>
