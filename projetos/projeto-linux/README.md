@@ -20,7 +20,7 @@ Projeto Linux da trilha de **DevSecOps**, passo a passo dividido em duas partes:
   - Acesso de administrador (root);
   - Conexão com a internet para instalar pacotes **(Recomendado, mas opcional)**.
 
-### Tópicos
+## Tópicos
 
 - [Ambiente Linux no Windows](#ambiente-linux-no-windows-wsl)
   - [Instalação do WSL](#instalação-do-wsl)
@@ -35,9 +35,9 @@ Projeto Linux da trilha de **DevSecOps**, passo a passo dividido em duas partes:
   - [Testes com estado Online](#testes-com-estado-online)
   - [Testes com estado Offline](#testes-com-estado-offline)
 
-### Ambiente Linux no Windows (WSL)
+## Ambiente Linux no Windows (WSL)
 
-#### Instalação do WSL
+### Instalação do WSL
 
 Com o PowerShell aberto **(e com permissão de administrador)**, escreva o comando:
 
@@ -48,7 +48,7 @@ wsl --install
 > [!WARNING]
 > É necessário reiniciar o computador após a instalação do **WSL**.
 
-#### Instalação do Ubuntu
+### Instalação do Ubuntu
 
 > [!NOTE]
 > Por padrão, a distribuição do **Linux** instalada será o **Ubuntu**, mesmo assim vamos ver como listar as distribuições e instalar o Ubuntu.
@@ -82,9 +82,9 @@ wsl --install -d Ubuntu-24.04
   <strong>Source: </strong><a href="https://mattzaskeonline.info/blog/2024-04/getting-started-wsl-quick-installation-guide">mattzaskeonline.info/blog</a>
 </details>
 
-### Instalação e Monitoramento do NGINX
+## Instalação e Monitoramento do NGINX
 
-#### Atualização de pacotes
+### Atualização de pacotes
 
 Antes de fazer qualquer modificação, atualize os pacotes do sistema para garantir que todas as dependências estejam na versão mais recente:
 
@@ -92,7 +92,7 @@ Antes de fazer qualquer modificação, atualize os pacotes do sistema para garan
 sudo apt update && sudo apt upgrade -y
 ```
 
-#### Instalação do Nginx
+### Instalação do Nginx
 
 Agora com o sistema atualizado, vamos instalar o NGINX usando o APT.
 
@@ -111,17 +111,17 @@ sudo systemctl status nginx
 > [!WARNING]
 > Use o comando **sudo systemctl enable nginx** para garantir que o **NGINX** seja inicializado junto com o sistema **após o desligamento ou reinício**.
 
-#### Criação do Script
+### Criação do Script
 
-##### Arquivo do script
+#### Arquivo do script
 
 Abra o terminal do Ubuntu e utilize o seguinte comando para criar um arquivo 'sh' na localização **/usr/bin**:
 
 ```
-touch /usr/bin/nginx_status_check.sh
+sudo touch /usr/bin/nginx_status_check.sh
 ```
 
-##### Passo a passo
+#### Passo a passo
 
 1. Parte 1
 
@@ -141,16 +141,11 @@ SYS_LOG_DIR="/var/log/nginx"
 
 3. Parte 3
 
-Define duas variáveis com as localizações dos arquivos onde serão salvos os logs (ONLINE E OFFLINE) e adiciona as permissões necessárias:
+Define duas variáveis com as localizações dos arquivos onde serão salvos os logs (ONLINE E OFFLINE):
 
 ```bash
 NGINX_LOG_ONLINE="$SYS_LOG_DIR/log_online.log"
 NGINX_LOG_OFFLINE="$SYS_LOG_DIR/log_offline.log"
-
-touch "$NGINX_LOG_ONLINE"
-touch "$NGINX_LOG_OFFLINE"
-chmod 644 "$NGINX_LOG_ONLINE"
-chmod 644 "$NGINX_LOG_OFFLINE"
 ```
 
 4. Parte 4
@@ -185,13 +180,6 @@ SYS_LOG_DIR="/var/log/nginx"
 NGINX_LOG_ONLINE="$SYS_LOG_DIR/log_online.log"
 NGINX_LOG_OFFLINE="$SYS_LOG_DIR/log_offline.log"
 
-# Cria os arquivos de log e adiciona permissão de leitura e escrita
-# Necessário por conta da localização (/var/log/)
-touch "$NGINX_LOG_ONLINE"
-touch "$NGINX_LOG_OFFLINE"
-chmod 644 "$NGINX_LOG_ONLINE"
-chmod 644 "$NGINX_LOG_OFFLINE"
-
 # Data atual
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
@@ -203,9 +191,11 @@ else
 fi
 ```
 
-#### Atualização das permissões
+### Atualização das permissões
 
 Agora, vamos mudar as permissões dos arquivos para permitir a execução/leitura.
+
+1. Script
 
 Abra o terminal e escreva/cole o seguinte comando:
 
@@ -216,14 +206,25 @@ chmod +x /usr/bin/nginx_status_check.sh
 > [!NOTE]
 > O comando **chmod** irá mudar as permissões do arquivo e o parâmetro **+x** vai permitir a execução em todos as categorias (usuário, grupos e outros, -rwxrwxr-x).
 
-#### Aplicação do CronJob
+2. Arquivos de log
+
+Precisamos criar e atualizar as permissões dos arquivos de log, necessário por conta da localização **(/var/log/)**.
+
+```
+touch /var/log/nginx/log_online.log /var/log/nginx/log_offline.log && chmod 644 /var/log/nginx/log_online.log /var/log/nginx/log_offline.log
+```
+
+> [!NOTE]
+> Esse comando irá criar os arquivos 'log_online.log' e 'log_offline.log' e definir a permissão de **leitura** e **escrita** para o usuário.
+
+### Aplicação do CronJob
 
 Sendo um dos objetivos a necessidade de monitoramento do estado do NGINX, vamos definir um CronJob e fazer o script funcionar a cada **5 minutos**.
 
 Abra o terminal e escreva/cole o seguinte comando:
 
 ```
-(crontab -l; echo "5 * * * * /usr/bin/nginx_status_check.sh") | crontab -
+(crontab -l; echo "*/5 * * * * /usr/bin/nginx_status_check.sh") | crontab -
 ```
 
 <details>
@@ -240,11 +241,13 @@ Abra o terminal e escreva/cole o seguinte comando:
 +------------ Minuto (0 - 59)
 ```
 
+> \*/5: Significa que o script será executado a cada 5 minutos, começando no minuto 0 de cada hora (por exemplo, 00:00, 00:05, 00:10, etc.).
+
 </details>
 
-### Testes e Validação
+## Testes e Validação
 
-#### Testes com estado Online
+### Testes com estado Online
 
 Vamos precisar esperar alguns minutos para que o CronJob faça nosso script funcionar.
 
@@ -269,7 +272,7 @@ tail -f /var/log/nginx/nginx_online.txt
 
 </details>
 
-#### Testes com estado Offline
+### Testes com estado Offline
 
 Para testar o estado **Offline** do **NGINX** iremos parar por um momento utilizando o comando:
 
@@ -295,6 +298,6 @@ tail -f /var/log/nginx/nginx_offline.txt
 
 </details>
 
-### Referências
+## Referências
 
 - https://learn.microsoft.com/pt-br/windows/wsl/install
