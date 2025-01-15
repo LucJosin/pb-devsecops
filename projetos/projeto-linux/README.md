@@ -219,7 +219,7 @@ Agora, vamos mudar as permissões dos arquivos para permitir a execução/leitur
 Abra o terminal e escreva/cole o seguinte comando:
 
 ```
-chmod +x /usr/bin/nginx_status_check.sh
+sudo chmod +x /usr/bin/nginx_status_check.sh
 ```
 
 > [!NOTE]
@@ -231,6 +231,10 @@ Precisamos criar e atualizar as permissões dos arquivos de log, necessário por
 
 ```
 sudo touch /var/log/nginx/status_online.log /var/log/nginx/status_offline.log && sudo chmod 644 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
+```
+
+```
+sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status && sudo chmod 644 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
 ```
 
 > [!NOTE]
