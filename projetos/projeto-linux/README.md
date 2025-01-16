@@ -53,7 +53,7 @@ wsl --install
 > [!NOTE]
 > Por padrão, a distribuição do **Linux** instalada será o **Ubuntu**, mesmo assim vamos ver como listar as distribuições e instalar o Ubuntu.
 
-1. Listagem das distribuições
+**1. Listagem das distribuições**
 
 Para ver uma lista das distribuições do Linux disponíveis, use o comando:
 
@@ -69,7 +69,7 @@ wsl --list --online
 </details>
 <br>
 
-2. Instalação do **Ubuntu 24.04** _(LTS / 2024-08-29)_
+**2. Instalação do **Ubuntu 24.04** _(LTS / 2024-08-29)_**
 
 ```
 wsl --install -d Ubuntu-24.04
@@ -102,14 +102,45 @@ Escreva ou cole o seguinte comando no terminal:
 sudo apt install nginx -y
 ```
 
+### Validando o estado do NGINX
+
+**1. Terminal**
+
 Use o comando abaixo para validar o status do NGINX:
 
 ```
 sudo systemctl status nginx
 ```
 
+<details>
+  <summary>Imagem: Validando o estado do NGINX no terminal</summary>
+  <img src="./assets/nginx-status.png"/>
+</details>
+<br>
+
+**2. Navegador**
+
+Abra o navegador com o seguinte link:
+
+```
+localhost
+```
+
+<details>
+  <summary>Imagem: Validando o estado do NGINX no navegador</summary>
+  <img src="./assets/nginx-navegador.png"/>
+</details>
+
+### Garantindo que o NGINX continue online
+
 > [!WARNING]
-> Use o comando **sudo systemctl enable nginx** para garantir que o **NGINX** seja inicializado junto com o sistema **após o desligamento ou reinício**.
+> Etapa importante para manter o NGINX ativo.
+
+Use o comando abaixo para garantir que o **NGINX** seja inicializado junto com o sistema **após o desligamento ou reinício**.
+
+```
+sudo systemctl enable nginx
+```
 
 ### Criação do Script
 
@@ -121,9 +152,9 @@ Abra o terminal do Ubuntu e utilize o seguinte comando para criar um arquivo 'sh
 sudo touch /usr/bin/nginx_status_check.sh
 ```
 
-#### Passo a passo
+#### Passo a passo (arquivo completo no final)
 
-1. Parte 1
+**Parte 1**
 
 Define esse arquivo executável como um script Bash:
 
@@ -131,7 +162,7 @@ Define esse arquivo executável como um script Bash:
 #!/usr/bin/env bash
 ```
 
-2. Parte 2
+**Parte 2**
 
 Define uma variável com a localização dos arquivos de log:
 
@@ -139,7 +170,7 @@ Define uma variável com a localização dos arquivos de log:
 SYS_LOG_DIR="/var/log/nginx"
 ```
 
-3. Parte 3
+**Parte 3**
 
 Define duas variáveis com as localizações dos arquivos onde serão salvos os logs (ONLINE E OFFLINE):
 
@@ -148,7 +179,7 @@ NGINX_status_online="$SYS_LOG_DIR/status_online.log"
 NGINX_status_offline="$SYS_LOG_DIR/status_offline.log"
 ```
 
-4. Parte 4
+**Parte 4**
 
 Define uma variável com a data atual:
 
@@ -156,7 +187,7 @@ Define uma variável com a data atual:
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 ```
 
-5. Parte 5
+**Parte 5**
 
 Verifica o status atual e escreve nos arquivos **NGINX_status_online** ou **NGINX_status_offline**
 
@@ -170,9 +201,13 @@ fi
 
 #### Escrendo no arquivo
 
-Para escrever o script no arquivo vamos usar o editor chamado **nano**.
+Para escrever o script no arquivo vamos usar o editor chamado **nano**:
 
-1. Copie o arquivo completo:
+```
+sudo nano /usr/bin/nginx_status_check.sh
+```
+
+Copie e cole o arquivo completo:
 
 ```bash
 #!/usr/bin/env bash
@@ -181,30 +216,24 @@ Para escrever o script no arquivo vamos usar o editor chamado **nano**.
 SYS_LOG_DIR="/var/log/nginx"
 
 # Localização dos nossos arquivos de log online e offline
-NGINX_status_online="$SYS_LOG_DIR/status_online.log"
-NGINX_status_offline="$SYS_LOG_DIR/status_offline.log"
+NGINX_LOG_ONLINE="$SYS_LOG_DIR/status_online.log"
+NGINX_LOG_OFFLINE="$SYS_LOG_DIR/status_offline.log"
 
 # Data atual
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
-# Verifica o status atual e escreve nos arquivos 'NGINX_status_online' ou 'NGINX_status_offline'
+# Verifica o status atual e escreve nos arquivos 'NGINX_LOG_ONLINE' ou 'NGINX_LOG_OFFLINE'
 if systemctl is-active --quiet nginx; then
-        echo "$DATE status: O serviço NGINX está ONLINE" >> "$NGINX_status_online"
+        echo "$DATE status: O serviço NGINX está ONLINE" >> "$NGINX_LOG_ONLINE"
 else
-        echo "$DATE status: O serviço NGINX está OFFLINE" >> "$NGINX_status_offline"
+        echo "$DATE status: O serviço NGINX está OFFLINE" >> "$NGINX_LOG_OFFLINE"
 fi
-```
-
-2. Cole no arquivo usando o nano:
-
-```
-sudo nano /usr/bin/nginx_status_check.sh
 ```
 
 > [!NOTE]
 > Use as teclhas <kbd>Ctrl</kbd> + <kbd>C</kbd> para copiar e <kbd>Ctrl</kbd> + <kbd>V</kbd> para colar.
 
-3. Salvando e saindo do nano:
+Salvando e saindo do nano:
 
 - <kbd>Ctrl</kbd> + <kbd>O</kbd> para escrever o arquivo;
 - <kbd>Enter</kbd> para confirmar;
@@ -214,23 +243,39 @@ sudo nano /usr/bin/nginx_status_check.sh
 
 Agora, vamos mudar as permissões dos arquivos para permitir a execução/leitura.
 
-1. Script
+**1. Script**
 
 Abra o terminal e escreva/cole o seguinte comando:
 
 ```
-chmod +x /usr/bin/nginx_status_check.sh
+sudo chmod +x /usr/bin/nginx_status_check.sh
 ```
 
 > [!NOTE]
 > O comando **chmod** irá mudar as permissões do arquivo e o parâmetro **+x** vai permitir a execução em todos as categorias (usuário, grupos e outros, -rwxrwxr-x).
 
-2. Arquivos de log
+**2. Arquivos de log**
 
 Precisamos criar e atualizar as permissões dos arquivos de log, necessário por conta da localização **(/var/log/)**.
 
+**2.1 Cria a pasta para salvar os logs e modifica o dono para $USER**
+
 ```
-sudo touch /var/log/nginx/status_online.log /var/log/nginx/status_offline.log && sudo chmod 644 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
+sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status
+```
+
+**2.2 Cria arquivos de logs e modifica as permissões para 755**
+
+```
+sudo touch /var/log/nginx/status_online.log /var/log/nginx/status_offline.log && sudo chmod 744 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
+```
+
+> Explicação: **775** ou **rwx-r---r--** significa que o usuário vai ter permissão para **ler**, **escrever** e **executar**, os grupos e outros podem apenas **ler**.
+
+**Comando final**
+
+```
+sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status && sudo touch /var/log/nginx/status_online.log /var/log/nginx/status_offline.log && sudo chmod 744 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
 ```
 
 > [!NOTE]
@@ -280,15 +325,8 @@ tail -f /var/log/nginx/status_online.log
 > Esse comando irá ler o arquivo e mostrar sempre que ocorrer alguma atualização. Para sair dele uso as teclas <kbd>Ctrl</kbd> + <kbd>C</kbd>
 
 <details>
-  <summary>Resultado esperado</summary>
-
-```
-"<DATA> NGINX: O serviço está ONLINE"
-"<DATA> NGINX: O serviço está ONLINE"
-"<DATA> NGINX: O serviço está ONLINE"
-"<DATA> NGINX: O serviço está ONLINE"
-```
-
+  <summary>Imagem: Testes com estado Online</summary>
+  <img src="./assets/status-log-online.png"/>
 </details>
 
 ### Testes com estado Offline
@@ -306,17 +344,11 @@ tail -f /var/log/nginx/status_offline.log
 ```
 
 <details>
-  <summary>Resultado esperado</summary>
-
-```
-"<DATA> NGINX: O serviço está OFFLINE"
-"<DATA> NGINX: O serviço está OFFLINE"
-"<DATA> NGINX: O serviço está OFFLINE"
-"<DATA> NGINX: O serviço está OFFLINE"
-```
-
+  <summary>Imagem: Testes com estado Offline</summary>
+  <img src="./assets/status-log-offline.png"/>
 </details>
 
 ## Referências
 
+- https://mattzaskeonline.info/blog/2024-04/getting-started-wsl-quick-installation-guide
 - https://learn.microsoft.com/pt-br/windows/wsl/install
