@@ -120,7 +120,7 @@ sudo systemctl status nginx
 
 **2. Navegador**
 
-Abra o navegador com o seguinte link:
+Abra o navegador com o seguinte link (ou clique <a href="http://localhost" target="_blank">aqui</a>):
 
 ```
 localhost
@@ -167,7 +167,7 @@ Define esse arquivo executável como um script Bash:
 Define uma variável com a localização dos arquivos de log:
 
 ```bash
-SYS_LOG_DIR="/var/log/nginx"
+SYS_LOG_DIR="/var/log/nginx/status"
 ```
 
 **Parte 3**
@@ -175,8 +175,8 @@ SYS_LOG_DIR="/var/log/nginx"
 Define duas variáveis com as localizações dos arquivos onde serão salvos os logs (ONLINE E OFFLINE):
 
 ```bash
-NGINX_status_online="$SYS_LOG_DIR/status_online.log"
-NGINX_status_offline="$SYS_LOG_DIR/status_offline.log"
+NGINX_LOG_ONLINE="$SYS_LOG_DIR/online.log"
+NGINX_LOG_OFFLINE="$SYS_LOG_DIR/offline.log"
 ```
 
 **Parte 4**
@@ -193,9 +193,9 @@ Verifica o status atual e escreve nos arquivos **NGINX_status_online** ou **NGIN
 
 ```bash
 if systemctl is-active --quiet nginx; then
-        echo "$DATE NGINX: O serviço NGINX está ONLINE" >> "$NGINX_status_online"
+        echo "$DATE status: O serviço NGINX está ONLINE" >> "$NGINX_LOG_ONLINE"
 else
-        echo "$DATE NGINX: O serviço NGINX está OFFLINE" >> "$NGINX_status_offline"
+        echo "$DATE status: O serviço NGINX está OFFLINE" >> "$NGINX_LOG_OFFLINE"
 fi
 ```
 
@@ -213,11 +213,11 @@ Copie e cole o arquivo completo:
 #!/usr/bin/env bash
 
 # Localização dos arquivos de log do sistema
-SYS_LOG_DIR="/var/log/nginx"
+SYS_LOG_DIR="/var/log/nginx/status"
 
 # Localização dos nossos arquivos de log online e offline
-NGINX_LOG_ONLINE="$SYS_LOG_DIR/status_online.log"
-NGINX_LOG_OFFLINE="$SYS_LOG_DIR/status_offline.log"
+NGINX_LOG_ONLINE="$SYS_LOG_DIR/online.log"
+NGINX_LOG_OFFLINE="$SYS_LOG_DIR/offline.log"
 
 # Data atual
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
@@ -252,7 +252,7 @@ sudo chmod +x /usr/bin/nginx_status_check.sh
 ```
 
 > [!NOTE]
-> O comando **chmod** irá mudar as permissões do arquivo e o parâmetro **+x** vai permitir a execução em todos as categorias (usuário, grupos e outros, -rwxrwxr-x).
+> O comando **chmod** irá mudar as permissões do arquivo e o parâmetro **+x** vai permitir a execução em todas as categorias (usuário, grupos e outros, -rwxrwxr-x).
 
 **2. Arquivos de log**
 
@@ -267,23 +267,20 @@ sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status
 **2.2 Cria arquivos de logs e modifica as permissões para 755**
 
 ```
-sudo touch /var/log/nginx/status_online.log /var/log/nginx/status_offline.log && sudo chmod 744 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
+sudo touch /var/log/nginx/online.log /var/log/nginx/offline.log && sudo chmod 744 /var/log/nginx/online.log /var/log/nginx/offline.log
 ```
 
-> Explicação: **775** ou **rwx-r---r--** significa que o usuário vai ter permissão para **ler**, **escrever** e **executar**, os grupos e outros podem apenas **ler**.
+> Explicação: **744** ou **rwx-r---r--** significa que o usuário vai ter permissão para **ler**, **escrever** e **executar**, os grupos e outros podem apenas **ler**.
 
 **Comando final**
 
 ```
-sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status && sudo touch /var/log/nginx/status_online.log /var/log/nginx/status_offline.log && sudo chmod 744 /var/log/nginx/status_online.log /var/log/nginx/status_offline.log
+sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status && sudo touch /var/log/nginx/online.log /var/log/nginx/offline.log && sudo chmod 744 /var/log/nginx/online.log /var/log/nginx/offline.log
 ```
-
-> [!NOTE]
-> Esse comando irá criar os arquivos 'status_online.log' e 'status_offline.log' e definir a permissão de **leitura** e **escrita** para o usuário.
 
 ### Aplicação do CronJob
 
-Sendo um dos objetivos a necessidade de monitoramento do estado do NGINX, vamos definir um CronJob e fazer o script funcionar a cada **5 minutos**.
+É necessário o monitoramento do estado do **NGINX**, vamos definir um **CronJob** e fazer o script funcionar a cada **5 minutos**.
 
 Abra o terminal e escreva/cole o seguinte comando:
 
@@ -313,12 +310,12 @@ Abra o terminal e escreva/cole o seguinte comando:
 
 ### Testes com estado Online
 
-Vamos precisar esperar alguns minutos para que o CronJob faça nosso script funcionar.
+Vamos precisar esperar alguns minutos para que o **CronJob** faça nosso script funcionar.
 
-No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'status_online.log':
+No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'online.log':
 
 ```
-tail -f /var/log/nginx/status_online.log
+tail -f /var/log/nginx/status/online.log
 ```
 
 > [!NOTE]
@@ -337,10 +334,10 @@ Para testar o estado **Offline** do **NGINX** iremos parar por um momento utiliz
 sudo systemctl stop nginx
 ```
 
-No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'status_offline.log':
+No terminal, escreva ou cole o seguinte comando para verificar o estado do arquivo 'offline.log':
 
 ```
-tail -f /var/log/nginx/status_offline.log
+tail -f /var/log/nginx/status/offline.log
 ```
 
 <details>
