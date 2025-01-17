@@ -4,6 +4,14 @@
     <img align="center" src="https://logospng.org/download/uol/logo-uol-icon-256.png" width="30" height="30" /> Compass UOL - DevSecOps
 </h1>
 
+<div align="center">
+
+| Passo a passo  |              Automatizado              |            Usando AWS            |
+| :------------: | :------------------------------------: | :------------------------------: |
+| (Esse arquivo) | [README.script.md](./README.script.md) | [README.aws.md](./README.aws.md) |
+
+</div>
+
 Projeto Linux da trilha de **DevSecOps**, passo a passo dividido em duas partes:
 
 1. Implementação do WSL on Windows com a distribuição Ubuntu;
@@ -189,7 +197,7 @@ DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
 **Parte 5**
 
-Verifica o status atual e escreve nos arquivos **NGINX_status_online** ou **NGINX_status_offline**
+Verifica o status atual e escreve nos arquivos **NGINX_LOG_ONLINE** ou **NGINX_LOG_OFFLINE**
 
 ```bash
 if systemctl is-active --quiet nginx; then
