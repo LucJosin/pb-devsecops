@@ -75,10 +75,16 @@ curl -o "$HOME/Downloads/nginx_setup.sh" https://github.com/LucJosin/pb-devsecop
 
 ## Ativando o script
 
-Utilize o comando abaixo para ativar o script:
+Primeiro, adicione permissão para **execução** no script:
 
 ```
-sudo $HOME/Downloads/nginx_setup.sh -y
+sudo chmod +x ~/Downloads/nginx_setup.sh
+```
+
+Use o comando abaixo para iniciar o script:
+
+```
+sudo ~/Downloads/nginx_setup.sh -s
 ```
 
 ## Testes e Validação
