@@ -23,10 +23,10 @@ Projeto Linux da trilha de **DevSecOps** usando o método automatizado.
 ## Tópicos
 
 - [Atualização de pacotes](#atualização-de-pacotes)
-- [Baixando o arquivo de script](#vaixando-o-arquivo-de-script)
+- [Baixando o arquivo de script](#baixando-o-arquivo-de-script)
   - [Usando wget](#usando-wget)
   - [Usando curl](#usando-curl)
-- [Ativando o script](#atualização-de-pacotes)
+- [Ativando o script](#ativando-o-script)
 - [Testes e Validação](#testes-e-validação)
   - [Testes com estado Online](#testes-com-estado-online)
   - [Testes com estado Offline](#testes-com-estado-offline)
