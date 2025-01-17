@@ -52,8 +52,6 @@ echo "NGINX instalado!"
 sudo systemctl enable nginx
 echo "Atualizado o 'systemctl' para que o NGINX inicie com o sistema"
 
-echo "Para validar, abra o navegador em: 'http://localhost'"
-
 # Criar o arquivo de script
 sudo touch /usr/bin/nginx_status_check.sh
 echo "Arquivo 'nginx_status_check.sh' criado em '/usr/bin'"
@@ -96,9 +94,12 @@ echo "Cronjob definido para '$NGINX_SCRIPT' rodar a cada 5 minutos!"
 
 # Finaliza
 echo ""
+echo ""
 echo "Script finalizado! Monitoramento do NGINX está ativo"
+echo "Para validar, abra o navegador em: 'http://localhost'"
 echo ""
 echo "O script de monitorameto está localizado em: $NGINX_SCRIPT"
 echo "Os arquvos de log estão na pasta: $SYS_LOG_DIR"
 echo ""
 echo "Use o comando 'tail -f $NGINX_LOG_ONLINE' para ver o status ONLINE e 'tail -f $NGINX_LOG_OFFLINE' para o status OFFLINE"
+echo ""
