@@ -27,16 +27,17 @@ validate_input() {
     done
 }
 
+# Atualizar os pacotes, opcional
+if validate_input "Atualizar pacotes?" $@; then
+    sudo apt update && sudo apt upgrade -y
+    clear -x
+    echo "Atualização completa!"
+fi
+
 # Confirmação
 if ! validate_input "Iniciando processo de instalação do NGINX, continuar?" $@; then
     echo "OK :)"
     exit 1
-fi
-
-# Atualizar os pacotes, opcional
-if validate_input "Atualizar pacotes?" $@; then
-    sudo apt update && sudo apt upgrade -y
-    echo "Atualização completa!"
 fi
 
 SYS_LOG_DIR="/var/log/nginx/status"
@@ -46,6 +47,7 @@ NGINX_SCRIPT="/usr/bin/nginx_status_check.sh"
 
 # Instala o NGINX
 sudo apt install nginx -y
+clear -x
 echo "NGINX instalado!"
 
 # Ativa o NGINX
