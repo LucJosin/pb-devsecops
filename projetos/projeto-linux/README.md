@@ -293,7 +293,7 @@ sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status
 Abra o terminal e escreva/cole o seguinte comando:
 
 ```
-(crontab -l; echo "*/5 * * * * /usr/bin/nginx_status_check.sh") | crontab -
+(crontab -l 2>/dev/null; echo "*/5 * * * * /usr/bin/nginx_status_check.sh") | crontab -
 ```
 
 <details>
