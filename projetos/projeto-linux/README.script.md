@@ -62,7 +62,7 @@ sudo apt install wget -y
 Copie e cole o comando abaixo no terminal para baixar o script usando **wget**:
 
 ```
-wget https://github.com/LucJosin/pb-devsecops/raw/refs/heads/main/projetos/projeto-linux/nginx_status_check.sh -P $HOME/Downloads/
+wget https://github.com/LucJosin/pb-devsecops/raw/refs/heads/main/projetos/projeto-linux/nginx_setup.sh -P $HOME/Downloads/
 ```
 
 ### Usando curl
@@ -70,7 +70,7 @@ wget https://github.com/LucJosin/pb-devsecops/raw/refs/heads/main/projetos/proje
 Copie e cole o comando abaixo no terminal para baixar o script usando **curl**:
 
 ```
-curl -o "$HOME/Downloads/nginx_status_check.sh" https://github.com/LucJosin/pb-devsecops/raw/refs/heads/main/projetos/projeto-linux/nginx_status_check.sh
+curl -o "$HOME/Downloads/nginx_setup.sh" https://github.com/LucJosin/pb-devsecops/raw/refs/heads/main/projetos/projeto-linux/nginx_setup.sh
 ```
 
 ## Ativando o script
@@ -78,7 +78,7 @@ curl -o "$HOME/Downloads/nginx_status_check.sh" https://github.com/LucJosin/pb-d
 Utilize o comando abaixo para ativar o script:
 
 ```
-sudo $HOME/Downloads/nginx_status_check.sh -y
+sudo $HOME/Downloads/nginx_setup.sh -y
 ```
 
 ## Testes e Validação
