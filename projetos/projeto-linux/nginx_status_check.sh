@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Utilize o script em 'https://lucjos.in/g/clean' para reverter todas as mudanças.
+
 # Localização dos arquivos de log do sistema
 SYS_LOG_DIR="/var/log/nginx/status"
 

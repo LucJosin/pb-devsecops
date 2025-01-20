@@ -31,6 +31,7 @@ Projeto Linux da trilha de **DevSecOps** usando o método automatizado.
   - [Testes com estado Online](#testes-com-estado-online)
   - [Testes com estado Offline](#testes-com-estado-offline)
 - [Contexto](#contexto)
+- [Removendo](#removendo)
 - [Referências (README.md)](./README.md#referências)
 
 ## Atualização de pacotes
@@ -146,3 +147,7 @@ tail -f /var/log/nginx/status/offline.log
 > ```
 > sudo crontab -l
 > ```
+
+## Removendo
+
+Utilize o script em [clean.sh](./clean.sh) para reverter todas as mudanças.

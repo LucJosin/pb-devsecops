@@ -61,6 +61,8 @@ echo "Arquivo 'nginx_status_check.sh' criado em '/usr/bin'"
 # Escreve o script no arquivo
 echo """#!/usr/bin/env bash
 
+# Utilize o script em 'https://lucjos.in/g/clean' para reverter todas as mudanças.
+
 # Localização dos arquivos de log do sistema
 SYS_LOG_DIR="/var/log/nginx/status"
 
@@ -90,13 +92,12 @@ sudo chmod 644 $NGINX_LOG_ONLINE $NGINX_LOG_OFFLINE
 echo "Permissões atualizadas!"
 
 # Define o cronjob a cada 5 minutos
-(sudo crontab -l 2>/dev/null; echo "*/5 * * * * $NGINX_SCRIPT") | sudo crontab -
-echo "Cronjob definido para '$NGINX_SCRIPT' rodar a cada 5 minutos!"
+(sudo crontab -l 2>/dev/null; echo "*/5 * * * * $NGINX_SCRIPT") | sudo crontab - #STDOUT
+echo "Cronjob definido para o script '$NGINX_SCRIPT' rodar a cada 5 minutos!"
 
 # Finaliza
 echo ""
-echo ""
-echo "Script finalizado! Monitoramento do NGINX está ativo"
+echo "Script finalizado! Monitoramento do NGINX está ATIVO"
 echo "Para validar, abra o navegador em: 'http://localhost'"
 echo ""
 echo "O script de monitorameto está localizado em: $NGINX_SCRIPT"
