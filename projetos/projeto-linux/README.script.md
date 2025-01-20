@@ -17,7 +17,7 @@ Projeto Linux da trilha de **DevSecOps** usando o método automatizado.
 - **Requisitos:**
   - Sistema com Linux instalado (Ubuntu);
   - Acesso de administrador (root);
-  - Conexão com a internet para instalar pacotes **(Recomendado, mas opcional)**.
+  - Conexão com a internet para instalar pacotes.
   - Pacote **wget** ou **curl** instalado para baixar o arquivo de **setup**.
 
 ## Tópicos
@@ -30,6 +30,8 @@ Projeto Linux da trilha de **DevSecOps** usando o método automatizado.
 - [Testes e Validação](#testes-e-validação)
   - [Testes com estado Online](#testes-com-estado-online)
   - [Testes com estado Offline](#testes-com-estado-offline)
+- [Contexto](#contexto)
+- [Referências (README.md)](./README.md#referências)
 
 ## Atualização de pacotes
 
@@ -125,3 +127,22 @@ tail -f /var/log/nginx/status/offline.log
   <summary>Imagem: Testes com estado Offline</summary>
   <img src="./assets/status-log-offline.png"/>
 </details>
+
+## Contexto
+
+> [!WARNING]
+> Todo esse passo a passo foi feito usando **root/sudo**, então os arquivos de log, o script e o cronjob estão todos "no nome do root".
+>
+> Você pode testar utilizando os comandos:
+>
+> ```
+> ls -ld /var/log/nginx/status/online.log
+> ```
+>
+> ```
+> ls -ld /usr/bin/nginx_status_check.sh
+> ```
+>
+> ```
+> sudo crontab -l
+> ```
