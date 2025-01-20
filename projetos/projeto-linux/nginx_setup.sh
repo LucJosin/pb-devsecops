@@ -83,15 +83,14 @@ sudo chmod +x $NGINX_SCRIPT
 
 # Prepara a pasta de log
 sudo mkdir $SYS_LOG_DIR
-sudo chown $USER:$USER $SYS_LOG_DIR
 
 # Prepara os arquivos de log e adiciona as permissões necessárias
 sudo touch $NGINX_LOG_ONLINE $NGINX_LOG_OFFLINE
-sudo chmod 744 $NGINX_LOG_ONLINE $NGINX_LOG_OFFLINE
+sudo chmod 644 $NGINX_LOG_ONLINE $NGINX_LOG_OFFLINE
 echo "Permissões atualizadas!"
 
 # Define o cronjob a cada 5 minutos
-(crontab -l 2>/dev/null; echo "*/5 * * * * $NGINX_SCRIPT") | crontab -
+(sudo crontab -l 2>/dev/null; echo "*/5 * * * * $NGINX_SCRIPT") | sudo crontab -
 echo "Cronjob definido para '$NGINX_SCRIPT' rodar a cada 5 minutos!"
 
 # Finaliza
@@ -104,4 +103,6 @@ echo "O script de monitorameto está localizado em: $NGINX_SCRIPT"
 echo "Os arquvos de log estão na pasta: $SYS_LOG_DIR"
 echo ""
 echo "Use o comando 'tail -f $NGINX_LOG_ONLINE' para ver o status ONLINE e 'tail -f $NGINX_LOG_OFFLINE' para o status OFFLINE"
+echo ""
+echo "ATENÇÃO: O script usa o contexto do 'root/sudo', então os arquivos de log, o script e o cronjob estão todos 'no nome do root'."
 echo ""
