@@ -26,7 +26,7 @@ Projeto Linux da trilha de **DevSecOps**, passo a passo dividido em duas partes:
 - **Requisitos:**
   - Sistema com Linux instalado (Ubuntu);
   - Acesso de administrador (root);
-  - Conexão com a internet para instalar pacotes **(Recomendado, mas opcional)**.
+  - Conexão com a internet para instalar pacotes.
 
 ## Tópicos
 
@@ -42,6 +42,8 @@ Projeto Linux da trilha de **DevSecOps**, passo a passo dividido em duas partes:
 - [Testes e Validação](#testes-e-validação)
   - [Testes com estado Online](#testes-com-estado-online)
   - [Testes com estado Offline](#testes-com-estado-offline)
+- [Contexto](#contexto)
+- [Referências](#referências)
 
 ## Ambiente Linux no Windows (WSL)
 
@@ -266,16 +268,16 @@ sudo chmod +x /usr/bin/nginx_status_check.sh
 
 Precisamos criar e atualizar as permissões dos arquivos de log, necessário por conta da localização **(/var/log/)**.
 
-**2.1 Cria a pasta para salvar os logs e modifica o dono para $USER**
+**2.1 Cria a pasta para salvar os logs**
 
 ```
-sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status
+sudo mkdir /var/log/nginx/status
 ```
 
-**2.2 Cria arquivos de logs e modifica as permissões para 755**
+**2.2 Cria arquivos de logs e modifica as permissões para 644**
 
 ```
-sudo touch /var/log/nginx/online.log /var/log/nginx/offline.log && sudo chmod 744 /var/log/nginx/online.log /var/log/nginx/offline.log
+sudo touch /var/log/nginx/status/online.log /var/log/nginx/status/offline.log && sudo chmod 644 /var/log/nginx/status/online.log /var/log/nginx/status/offline.log
 ```
 
 > Explicação: **744** ou **rwx-r---r--** significa que o usuário vai ter permissão para **ler**, **escrever** e **executar**, os grupos e outros podem apenas **ler**.
@@ -283,7 +285,7 @@ sudo touch /var/log/nginx/online.log /var/log/nginx/offline.log && sudo chmod 74
 **Comando final**
 
 ```
-sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status && sudo touch /var/log/nginx/online.log /var/log/nginx/offline.log && sudo chmod 744 /var/log/nginx/online.log /var/log/nginx/offline.log
+sudo mkdir /var/log/nginx/status && sudo touch /var/log/nginx/status/online.log /var/log/nginx/status/offline.log && sudo chmod 644 /var/log/nginx/status/online.log /var/log/nginx/status/offline.log
 ```
 
 ### Aplicação do CronJob
@@ -293,7 +295,7 @@ sudo mkdir /var/log/nginx/status && sudo chown $USER:$USER /var/log/nginx/status
 Abra o terminal e escreva/cole o seguinte comando:
 
 ```
-(crontab -l 2>/dev/null; echo "*/5 * * * * /usr/bin/nginx_status_check.sh") | crontab -
+(sudo crontab -l 2>/dev/null; echo "*/5 * * * * /usr/bin/nginx_status_check.sh") | sudo crontab -
 ```
 
 <details>
@@ -353,7 +355,28 @@ tail -f /var/log/nginx/status/offline.log
   <img src="./assets/status-log-offline.png"/>
 </details>
 
+## Contexto
+
+> [!WARNING]
+> Todo esse passo a passo foi feito usando **root/sudo**, então os arquivos de log, o script e o cronjob estão todos "no nome do root".
+>
+> Você pode testar utilizando os comandos:
+>
+> ```
+> ls -ld /var/log/nginx/status/online.log
+> ```
+>
+> ```
+> ls -ld /usr/bin/nginx_status_check.sh
+> ```
+>
+> ```
+> sudo crontab -l
+> ```
+
 ## Referências
 
 - https://mattzaskeonline.info/blog/2024-04/getting-started-wsl-quick-installation-guide
 - https://learn.microsoft.com/pt-br/windows/wsl/install
+- https://stackoverflow.com/questions/35220654/how-to-verify-if-nginx-is-running-or-not
+- https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units
