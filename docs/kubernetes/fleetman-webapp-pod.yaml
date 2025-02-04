@@ -4,6 +4,7 @@ metadata:
   name: webapp
 
 spec:
+  # minReadySeconds: 10 # deploy delay of 10 seconds
   replicas: 1
   selector:
     matchLabels:
@@ -16,4 +17,4 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: "richardchesterwood/k8s-fleetman-webapp-angular:release0"
+          image: "richardchesterwood/k8s-fleetman-webapp-angular:release0-5"
