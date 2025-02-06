@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue
+
+spec:
+  # minReadySeconds: 10 # deploy delay of 10 seconds
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue
+  template:
+    metadata:
+      labels:
+        app: queue
+
+    spec:
+      containers:
+        - name: queue
+          image: "richardchesterwood/k8s-fleetman-queue:release2"

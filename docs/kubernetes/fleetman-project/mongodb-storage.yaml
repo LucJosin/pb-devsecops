@@ -1,0 +1,30 @@
+# Volume request
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+
+spec:
+  storageClassName: mongolocalstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+# How do we want it implemented
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-local-storage
+
+spec:
+  storageClassName: mongolocalstorage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/fleetman/mongo/"
+    type: DirectoryOrCreate
