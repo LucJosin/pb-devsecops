@@ -11,11 +11,11 @@ Documentação da sprint de **DevSecOps** com Docker, Containers e Kubernetes.
 - [Kubernetes Pods e Services](./)
 - [Projeto Fleetman](./fleetman-project/)
   - API ([Service](./fleetman-project/api-gateway-service.yaml) / [Pod](./fleetman-project/api-gateway-pod.yaml))
-  - MongoDB ([Service](./fleetman-project/api-gateway-service.yaml) / [Pod](./fleetman-project/api-gateway-pod.yaml))
-  - Position Simulator ([Service](./fleetman-project/api-gateway-service.yaml) / [Pod](./fleetman-project/api-gateway-pod.yaml))
-  - Position Tracker ([Service](./fleetman-project/api-gateway-service.yaml) / [Pod](./fleetman-project/api-gateway-pod.yaml))
-  - Queue ([Service](./fleetman-project/api-gateway-service.yaml) / [Pod](./fleetman-project/api-gateway-pod.yaml))
-  - Webapp ([Service](./fleetman-project/api-gateway-service.yaml) / [Pod](./fleetman-project/api-gateway-pod.yaml))
+  - MongoDB ([Service](./fleetman-project/mongodb-service.yaml) / [Pod](./fleetman-project/mongodb-pod.yaml))
+  - Position Simulator ([Pod](./fleetman-project/position-simulator-pod.yaml))
+  - Position Tracker ([Service](./fleetman-project/position-tracker-service.yaml) / [Pod](./fleetman-project/position-tracker-pod.yaml))
+  - Queue ([Service](./fleetman-project/queue-service.yaml) / [Pod](./fleetman-project/queue-pod.yaml))
+  - Webapp ([Service](./fleetman-project/webapp-service.yaml) / [Pod](./fleetman-project/webapp-pod.yaml))
 
 ### Projeto Fleeman
 
