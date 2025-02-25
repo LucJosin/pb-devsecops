@@ -19,7 +19,7 @@ Documentação da sprint de **DevSecOps** com Docker, Containers e Kubernetes.
 
 ### Projeto Fleeman
 
-Passo a passo simplificado para consequir rodar o projeto **fleetman** com kubernetes.
+Passo a passo simplificado para rodar o projeto **fleetman** com kubernetes.
 
 #### Requisitos (Linux)
 
