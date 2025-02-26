@@ -15,9 +15,9 @@ import (
 const (
 	port               = ":4689"
 	errorRate          = 5.0
-	usersLoggedMin     = 100
+	usersLoggedMin     = 50
 	usersLoggedMax     = 250
-	metricsUpdateDelay = 150 * time.Millisecond
+	metricsUpdateDelay = 100 * time.Millisecond
 )
 
 var (
@@ -95,6 +95,14 @@ func randomGaussian(min, max, skew float64) float64 {
 }
 
 func trackMetrics() {
+	// Fake initial data
+	requestsCounter.WithLabelValues("200").Add(float64(70 + rng.Intn(150)))
+	requestsCounter.WithLabelValues("500").Add(float64(5 + rng.Intn(20)))
+	requestsCounter.WithLabelValues("400").Add(float64(20 + rng.Intn(30)))
+	requestsCounter.WithLabelValues("403").Add(float64(25 + rng.Intn(50)))
+	requestsCounter.WithLabelValues("404").Add(float64(40 + rng.Intn(60)))
+	requestsCounter.WithLabelValues("301").Add(float64(100 + rng.Intn(150)))
+
 	for {
 		statusCode := "200"
 		randVal := rng.Float64()
@@ -102,10 +110,14 @@ func trackMetrics() {
 		switch {
 		case randVal < (errorRate / 100):
 			statusCode = "500" // Internal Server Error
-		case randVal < (errorRate/100)+0.15:
+		case randVal < (errorRate/100)+0.08:
 			statusCode = "400" // Bad Request
-		case randVal < (errorRate/100)+0.40:
+		case randVal < (errorRate/100)+0.15:
+			statusCode = "403" // Forbidden
+		case randVal < (errorRate/100)+0.22:
 			statusCode = "404" // Not Found
+		case randVal < (errorRate/100)+0.30:
+			statusCode = "301" // Moved
 		}
 
 		requestsCounter.WithLabelValues(statusCode).Inc()
