@@ -69,4 +69,10 @@ Projeto Docker da trilha de **DevSecOps**:
 - [Criação do **EC2 (Template)**](9.ec2_template.md#criação-do-ec2-template);
 - [Criação e Configuração do **Auto Scaling Group**](10.auto_scaling_group.md#criação-e-configuração-do-auto-scaling-group).
 
-> [VAMOS COMEÇAR ->](1.vpc_e_subnets.md#criação-da-vpc)
+---
+
+<div align="center">
+
+[Iniciar →](1.vpc_e_subnets.md#criação-da-vpc)
+
+<div>
