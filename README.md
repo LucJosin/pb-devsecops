@@ -10,6 +10,18 @@
   - [Ambiente Linux no Windows](./projetos/projeto-linux/README.md#ambiente-linux-no-windows-wsl)
   - [Instalação e Monitoramento do NGINX](./projetos/projeto-linux/README.md#instalação-e-monitoramento-do-nginx)
   - [Testes e Validação](./projetos/projeto-linux/README.md#testes-e-validação)
+- [Projeto Docker](./projetos/projeto-docker/README.md)
+  - [Criação da **VPC**](./projetos/project-docker/1.vpc_e_subnets.md#criação-da-vpc);
+  - [Criação das **Subnets**](./projetos/project-docker/1.vpc_e_subnets.md#criação-das-subnets);
+  - [Criação do **Internet Gateway**](./projetos/project-docker/2.internet_gateway.md#criação-do-internet-gateway);
+  - [Criação do **NAT Gateway**](./projetos/project-docker/3.nat_gateways.md#criação-dos-nat-gateways);
+  - [Criação e Configuração das **Route Tables**](4.route_tables.md#criação-e-configuração-das-route-tables);]
+  - [Criação e Configuração dos **Security Groups**](5.security_groups.md#criação-e-configuração-dos-security-groups);
+  - [Criação do **EFS**](./projetos/project-docker/6.efs.md#criação-do-efs);
+  - [Criação do **RDS**](./projetos/project-docker/7.rds.md#criação-do-rds-mysql);
+  - [Criação do **Load Balancer**](./projetos/project-docker/8.load_balancer.md#criação-do-load-balancer);
+  - [Criação do **EC2 (Template)**](./projetos/project-docker/9.ec2_template.md#criação-do-ec2-template);
+  - [Criação e Configuração do **Auto Scaling Group**](./projetos/project-docker/10.auto_scaling_group.md#criação-e-configuração-do-auto-scaling-group).
 
 ### Documentação
 
