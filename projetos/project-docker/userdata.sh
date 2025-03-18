@@ -29,6 +29,79 @@ WORDPRESS_DB_NAME=$(echo "$SECRETS" | jq -r '.WORDPRESS_DB_NAME')
 EFS_ENDPOINT=$(echo "$SECRETS" | jq -r '.EFS_ENDPOINT')
 echo "[userdata.sh] Done! All secrets configured."
 
+# Amazon CloudWatch Agent
+
+## Instala o pacote do CloudWatch Agent
+echo "[userdata.sh] Setting up CloudWatch Agent..."
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+sudo dpkg -i amazon-cloudwatch-agent.deb
+
+# Cria o arquivo de configuração
+CW_AGENT_CONFIG_PATH="/opt/aws/amazon-cloudwatch-agent/etc"
+sudo mkdir -p "$CW_AGENT_CONFIG_PATH"
+cat << EOF > "$CW_AGENT_CONFIG_PATH/cloudwatch-agent.json"
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "run_as_user": "root",
+    "logfile": "$CW_AGENT_CONFIG_PATH/cloudwatch-agent.json"
+  },
+  "metrics": {
+    "append_dimensions": {
+      "InstanceId": "\${aws:InstanceId}"
+    },
+    "aggregation_dimensions": [["InstanceId"]],
+    "metrics_collected": {
+      "cpu": {
+        "measurement": ["cpu_usage_idle", "cpu_usage_iowait", "cpu_usage_user", "cpu_usage_system", "cpu_usage_steal"],
+        "metrics_collection_interval": 60,
+        "totalcpu": true
+      },
+      "mem": {
+        "measurement": ["mem_used", "mem_free", "mem_cached", "mem_total", "mem_used_percent"],
+        "metrics_collection_interval": 60
+      },
+      "disk": {
+        "measurement": ["disk_used", "disk_free", "diskio_io_time", "disk_total"],
+        "metrics_collection_interval": 60,
+        "resources": ["*"]
+      }
+    }
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/syslog",
+            "log_group_name": "syslog",
+            "log_stream_name": "{instance_id}",
+            "timestamp_format": "%b %d %H:%M:%S"
+          },
+          {
+            "file_path": "/var/log/messages",
+            "log_group_name": "messages",
+            "log_stream_name": "{instance_id}",
+            "timestamp_format": "%b %d %H:%M:%S"
+          },
+          {
+            "file_path": "/var/log/cloud-init-output.log",
+            "log_group_name": "cloud-init-logs",
+            "log_stream_name": "{instance_id}",
+            "timestamp_format": "%Y-%m-%d %H:%M:%S"
+          }
+        ]
+      }
+    }
+  }
+}
+EOF
+echo "[userdata.sh] Created CloudWatch Agent config file at: '$CW_AGENT_CONFIG_PATH/cloudwatch-agent.json'"
+
+## Ativa o CloudWatch Agent
+sudo amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c "file:$CW_AGENT_CONFIG_PATH/cloudwatch-agent.json" -s
+echo "[userdata.sh] Done! CloudWatch Agent has been configured and started."
+
 # Instalando Docker Engine utilizando APT
 # https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 
