@@ -1,9 +1,33 @@
 #!/usr/bin/env bash
 
-# Atualiza os pacotes
-echo "Updating packages..."
-sudo apt update && sudo apt upgrade -y
-echo "Updated packages!"
+# Atualiza os pacotes e instala pacotes:
+echo "[userdata.sh] Updating packages..."
+sudo apt update && sudo apt upgrade -y && sudo apt install -y jq unzip
+echo "[userdata.sh] Updated packages!"
+
+# Instala o AWS CLI:
+
+echo "[userdata.sh] Installing AWS CLI..."
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli-exe-linux-x86_64.zip"
+unzip -q awscli-exe-linux-x86_64.zip
+sudo ./aws/install
+rm -rf aws awscli-exe-linux-x86_64.zip
+AWS_CLI_INFO=$(aws --version)
+echo "[userdata.sh] Done! Installed AWS CLI version $AWS_CLI_INFO"
+
+# Configura os segredos do AWS Secret Manager:
+
+## Pega os segredos:
+echo "[userdata.sh] Setting up secrets..."
+SECRETS=$(aws secretsmanager get-secret-value --secret-id wordpress/docker/credentials --query SecretString --output text | jq -r '.WPDockerSecrets')
+
+## Extrai e seta os valores individuais:
+WORDPRESS_DB_HOST=$(echo "$SECRETS" | jq -r '.WORDPRESS_DB_HOST')
+WORDPRESS_DB_USER=$(echo "$SECRETS" | jq -r '.WORDPRESS_DB_USER')
+WORDPRESS_DB_PASSWORD=$(echo "$SECRETS" | jq -r '.WORDPRESS_DB_PASSWORD')
+WORDPRESS_DB_NAME=$(echo "$SECRETS" | jq -r '.WORDPRESS_DB_NAME')
+EFS_ENDPOINT=$(echo "$SECRETS" | jq -r '.EFS_ENDPOINT')
+echo "[userdata.sh] Done! All secrets configured."
 
 # Instalando Docker Engine utilizando APT
 # https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
