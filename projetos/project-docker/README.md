@@ -66,8 +66,14 @@ Projeto Docker da trilha de **DevSecOps**:
 - [Criação do **EFS**](6.efs.md#criação-do-efs);
 - [Criação do **RDS**](7.rds.md#criação-do-rds-mysql);
 - [Criação do **Load Balancer**](8.load_balancer.md#criação-do-load-balancer);
-- [Criação do **EC2 (Template)**](9.ec2_template.md#criação-do-ec2-template);
-- [Criação e Configuração do **Auto Scaling Group**](10.auto_scaling_group.md#criação-e-configuração-do-auto-scaling-group).
+- [Criação do **Secrets Manager**](9.secrets_manager.md#criação-dos-segredos-secrets-manager);
+- [Criação do **Policy IAM**](10.policy_iam.md);
+- [Criação do **EC2 (Template)**](11.ec2_template.md#criação-do-ec2-template);
+- [Criação do **Auto Scaling Group**](12.auto_scaling_group.md#criação-e-configuração-do-auto-scaling-group).
+- [Criação do **Certificate Manager**](13.certificate_manager.md#criação-e-configuração-do-certificate-manager-ssl).
+- [Criação do **EC2 ICE**](14.ec2_ice.md#criação-do-ec2-ice).
+- [Criação do **CloudWatch Alarm**](15.cloudwatch_alarm.md).
+- [EXTRAS](16.EXTRAS.md).
 
 ---
 
