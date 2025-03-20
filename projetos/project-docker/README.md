@@ -6,6 +6,27 @@
 
 Projeto Docker da trilha de **DevSecOps**:
 
+> [!TIP]
+> Resumo do projeto anterior:
+>
+> - 1 Internet Gateway
+> - 2 NATs
+> - 4 Subnets
+>   - 2 Públicas
+>   - 2 Privadas
+> - Load Balancer
+> - Auto Scaling Group
+>
+> Após a atualização:
+>
+> - Trocado o **Bastion** pelo **EC2 ICE**;
+> - Wordpress agora é um "service" (inicia junto com a instância);
+> - Adicionado o **Secrets Manager**;
+> - Adicionado o **CloudWatch** com alarme;
+> - Adicionado novas políticas;
+> - Adicionado o **Certificate Manager**;
+> - Adicionado um domínio ([blog.lucasjosino.com](https://blog.lucasjosino.com));
+
 ## Objetivos
 
 - Instalar e configurar o **Docker** em uma **EC2** (usando [User Data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html));
